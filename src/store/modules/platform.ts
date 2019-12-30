@@ -20,7 +20,7 @@ class Platform extends VuexModule {
     Axios({
       method: 'POST',
       data: {
-        query: query_userPlatformLoad,
+        query: null,
         variables: {
           userId: Vue.prototype.$cookie.get('userId')
         },
@@ -29,7 +29,7 @@ class Platform extends VuexModule {
       const user = response.data.data.user
       const profile = response.data.data.profile
 
-      AuthModule.initializeUser({user: user, profile: profile, summoners: summoners})
+      AuthModule.initializeUser({user: user, profile: profile})
 
       this.SET_PLATFORM_LOADED(true)
       if (router.currentRoute.query.nextUrl) {
