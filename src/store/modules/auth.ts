@@ -67,8 +67,8 @@ class Auth extends VuexModule {
     Vue.prototype.$cookie.delete('token')
     Vue.prototype.$cookie.delete('userId')
     Vue.prototype.$cookie.delete('twitch_access_token')
+    router.push({ name: 'Home' })
     this.RESET_STATE()
-    router.push({ name: 'Landing' })
   }
 
   @Action({rawError: true})

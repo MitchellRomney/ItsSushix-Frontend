@@ -56,6 +56,7 @@ export const query_userPlatformLoad =
         viewCount
         followerCount
         subscriberCount
+        messagesCount
         loyaltyPoints
         minutesWatched
         bot
@@ -82,9 +83,25 @@ export const mutation_twitchLogin =
       created
     }
   }`
-export const mutation_setUserLoyalty =
-    `mutation SetUserLoyalty($payload: String!) {
-      setUserLoyalty(payload: $payload) {
-        success
-      }
-    }`
+export const query_getTwitchUser =
+  `query GetTwitchUser($username: String!) {
+    twitchUser(username: $username){
+      twitchId
+      login
+      displayName
+      type
+      broadcasterType
+      description
+      profileImageUrl
+      offlineImageUrl
+      viewCount
+      followerCount
+      subscriberCount
+      messagesCount
+      loyaltyPoints
+      minutesWatched
+      bot
+      dateModified
+      dateCreated
+    }
+  }`

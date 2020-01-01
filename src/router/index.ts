@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Landing from "@/views/Landing.vue"
+import Home from "@/views/Home.vue"
 // @ts-ignore
 import * as JWT from 'jwt-decode'
 import {PlatformModule} from "@/store/modules/platform"
@@ -11,8 +11,8 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Landing',
-    component: Landing
+    name: 'Home',
+    component: Home
   },
   {
     path: '/login',
@@ -25,11 +25,10 @@ const routes = [
     component: () => import("@/views/Loading.vue"),
   },
   {
-    path: '/home',
-    name: 'Home',
-    component: () => import("@/views/Home.vue"),
-    meta: { requiresLogin: true }
-  }
+    path: '/profile/:username',
+    name: 'Profile',
+    component: () => import("@/views/Profile.vue"),
+  },
 ]
 
 const router = new VueRouter({
@@ -73,16 +72,12 @@ router.beforeEach((to, from, next) => {
           nextUrl: to.fullPath
         }
       })
-    } else if (to.matched.some(record => record.meta.requiresAdmin)){
-      if (!AuthModule.user || !AuthModule.user.isSuperuser){
+    } else if (to.matched.some(record => record.meta.requiresAdmin)) {
+      if (!AuthModule.user || !AuthModule.user.isSuperuser) {
         next({
           name: 'Home'
         })
       }
-    } else if (to.name === 'Landing' && AuthModule.user){
-      next({
-        name: 'Home'
-      })
     }
   } else if (to.matched.some(record => record.meta.requiresLogin)) {
     next({
