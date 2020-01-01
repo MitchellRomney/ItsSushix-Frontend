@@ -1,5 +1,6 @@
-@import "./animations";
-@import "./variables";
+@import "./partials/_animations";
+@import "./partials/_variables";
+@import "./partials/_buttons.scss";
 
 body {
   margin: 0;
@@ -9,70 +10,7 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
 
-.btn {
-  position: relative;
-  z-index: 1;
-  display: inline-block;
-  background-color: grey;
-  padding: 10px 20px;
-  color: white;
-  font-size: 0.8rem;
-  font-weight: bold;
-  border-radius: 2px;
-  cursor: pointer;
-  border: none;
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.0);
-  transition: transform 0.25s ease;
-
-  &.btn--icon {
-    text-align: left;
-
-    svg {
-      margin-right: 10px;
-    }
-  }
-
-  &:hover {
-    transform: scale3d(1.05, 1.05, 1.05);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-
-  &::before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    top: 50%;
-    left: 10%;
-    right: 10%;
-    bottom: 10%;
-    filter: blur(1rem);
-  }
-
-  &.btn--small {
-    margin: 5px;
-    padding: 10px 10px;
-    font-size: 0.7rem;
-  }
-
-  &.btn--blue {
-    background: linear-gradient(90deg, #4776E6 0%, #8E54E9 90%);
-
-    &::before {
-      background: linear-gradient(90deg, #4776E6 0%, #8E54E9 90%);
-    }
-  }
-
-  &.disabled {
-    background: lightgrey;
-    cursor: initial;
-
-    &::before {
-      background: none;
-    }
-
-    &:hover {
-      transform: none;
-      box-shadow: none;
-    }
-  }
+.responsive {
+  width: 100%;
+  height: auto;
 }

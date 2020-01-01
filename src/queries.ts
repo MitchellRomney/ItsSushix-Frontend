@@ -10,33 +10,13 @@ export const query_getLeaderboard =
       viewCount
     }
   }`
-
-export const mutation_login =
-    `mutation Login($username: String!, $password: String!) {
-        login(username: $username, password: $password) {
-            user {
-                token
-                id
-                username
-                firstName
-                lastName
-                isStaff
-                isActive
-                isSuperuser
-                lastLogin
-                dateJoined
-            }
-        }
-    }`
-
 export const mutation_refreshToken =
-    `mutation RefreshToken($token: String!) {
-          refreshToken(token: $token) {
-            token
-            payload
-          }
-        }`
-
+  `mutation RefreshToken($token: String!) {
+    refreshToken(token: $token) {
+      token
+      payload
+    }
+  }`
 export const query_getStatistics =
   `{
     statistics {
@@ -47,3 +27,64 @@ export const query_getStatistics =
       messagesCount
     }
   }`
+export const query_userPlatformLoad =
+  `query UserPlatformLoad($userId: Int!){
+    user(userId: $userId) {
+      id
+      lastLogin
+      isSuperuser
+      username
+      firstName
+      lastName
+      email
+      isStaff
+      isActive
+      dateJoined
+    }
+    profile(userId: $userId){
+      id  
+      emailConfirmed
+      twitchUser {
+        twitchId
+        login
+        displayName
+        type
+        broadcasterType
+        description
+        profileImageUrl
+        offlineImageUrl
+        viewCount
+        followerCount
+        subscriberCount
+        loyaltyPoints
+        minutesWatched
+        bot
+        dateModified
+        dateCreated
+      }
+    }
+  }`
+export const mutation_twitchLogin =
+  `mutation TwitchLogin($twitchUsername: String!, $twitchId: Int!, $email: String!) {
+    twitchLogin(twitchUsername: $twitchUsername, twitchId: $twitchId, email: $email) {
+      user {
+        token
+        id
+        username
+        firstName
+        lastName
+        isStaff
+        isActive
+        isSuperuser
+        lastLogin
+        dateJoined
+      }
+      created
+    }
+  }`
+export const mutation_setUserLoyalty =
+    `mutation SetUserLoyalty($payload: String!) {
+      setUserLoyalty(payload: $payload) {
+        success
+      }
+    }`

@@ -7,54 +7,82 @@
             <img alt="sushix" src="../assets/images/sushix-avatar.png"/>
           </div>
         </router-link>
-        <div class="login-panel__error" v-if="errorMessage">
-          {{ errorMessage }}
-        </div>
-        <h3 class="login-panel__byline">
-          Login to your account you FOOL
-        </h3>
-        <form @submit.prevent="login" class="login-form">
-          <div class="login-form__username">
-            <label for="username_input"><b>Username:</b></label>
-            <input id="username_input" v-model="username" placeholder="Enter your username..."
-                   autocomplete="on" @keyup.enter="login">
-          </div>
-          <div class="login-form__password">
-            <label for="password_input"><b>Password:</b></label>
-            <input id="password_input" v-model="password" type="password"
-                   placeholder="Enter your password..." autocomplete="on" @keyup.enter="login">
-          </div>
-        </form>
-
-        <button class="btn btn--blue" @click="login">Login</button>
-
-        <div class="login-panel__register">
-          <span>Don't have an account yet?</span>
-          <button class="btn btn--blue disabled">Register</button>
-        </div>
+        <a :href="twitchLoginLink">
+          <button class="btn btn--twitch btn--icon" :class="{ 'btn--disabled' : returnedFromTwitch }">
+            <font-awesome-icon :icon="['fab', 'twitch']"/>
+            <span v-if="!returnedFromTwitch">Login with Twitch</span>
+            <span v-else>Logging you in...</span>
+          </button>
+        </a>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+    import * as JWT from 'jwt-decode'
     import {AuthModule} from "../store/modules/auth";
 
     export default {
         name: 'login',
         data() {
-            return {
-                username: '',
-                password: '',
-                loading: false,
-                errorMessage: null,
+            return {}
+        },
+        computed: {
+            returnedFromTwitch() {
+                const hash = window.location.hash.substr(1);
+                if (hash) {
+                    return hash.split('&').reduce(function (result, item) {
+                        const parts = item.split('=');
+                        result[parts[0]] = parts[1];
+                        return result;
+                    }, {});
+                } else {
+                    return null
+                }
+            },
+            twitchLoginLink() {
+                if (!this.returnedFromTwitch) {
+                    const client_id = process.env.VUE_APP_TWITCH_CLIENT_ID
+                    const redirect_uri = process.env.NODE_ENV === 'development' ? 'http://localhost:8060/login' : 'https://sushix.tv/login'
+                    const state = localStorage.getItem('state')
+                    const response_type = 'token+id_token'
+                    const scope = 'openid'
+                    const claims = JSON.stringify({
+                        id_token: {
+                            email: null,
+                            preferred_username: null
+                        }
+                    })
+
+                    return (
+                        'https://id.twitch.tv/oauth2/authorize' +
+                        '?client_id=' + client_id +
+                        '&redirect_uri=' + redirect_uri +
+                        '&response_type=' + response_type +
+                        '&scope=' + scope +
+                        '&state=' + state +
+                        '&claims=' + claims
+                    )
+                } else {
+                    return ''
+                }
             }
         },
         methods: {
-            login() {
-                AuthModule.login({
-                    username: this.username,
-                    password: this.password
+            generateStateKey() {
+                localStorage.setItem('state', [...Array(10)].map(i => (~~(Math.random() * 36)).toString(36)).join(''))
+            }
+        },
+        mounted() {
+            this.generateStateKey()
+            if (this.returnedFromTwitch) {
+                const parsedIdToken = JWT(this.returnedFromTwitch.id_token)
+                this.$cookie.set('twitch_access_token', this.returnedFromTwitch.access_token)
+                AuthModule.twitchLogin({
+                    username: parsedIdToken.preferred_username,
+                    email: parsedIdToken.email,
+                    twitchId: parsedIdToken.sub
                 })
             }
         }

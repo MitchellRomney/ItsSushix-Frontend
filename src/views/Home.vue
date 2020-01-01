@@ -1,228 +1,114 @@
 <template>
   <div id="home">
-    <div class="content-wrapper">
-      <div class="leaderboard">
-        <div class="leaderboard__header">
-          <h1>Leaderboard</h1>
-          <div class="leaderboard__toggle">
-            <toggle-button v-model="metricLoyalty" :labels="{ checked: 'Loyalty', unchecked: 'Watch Time' }" :width="100"/>
-          </div>
+    <div class="user-panel">
+      <div class="user-panel__header">
+        <div class="user-panel__avatar">
+          <img :alt="twitchUser.displayName" class="responsive" :src="twitchUser.profileImageUrl"/>
         </div>
-        <div class="leaderboard__list">
-          <transition-group name="list">
-            <div class="leaderboard__item" v-for="(user, index) in leaderboard" :key="user.id">
-              <span>#{{ index + 1 }}</span>
-              <span>{{ user.displayName }}</span>
-              <div class="leaderboard__value">
-          <span v-if="metricLoyalty">
-            {{ user.loyaltyPoints }}
-          </span>
-                <span v-else>
-            {{ user.minutesWatched }}
-          </span>
-                {{ metric }}
-              </div>
-            </div>
-          </transition-group>
-        </div>
+        <h1>
+          Welcome, {{ twitchUser.displayName }}
+        </h1>
       </div>
-      <div class="stats">
-        <div class="stats__panel">
-          <h2 class="stats__header">Statistics</h2>
-          <div class="stats__category">
-            <div class="stats__sub-header">Meepalytics</div>
-              <div class="stats__stat">
-                <span class="stats__stat-label">Meep Count</span>
-                <span class="stats__stat-value" v-if="statistics">{{ this.statistics.meepCount }}</span>
-              </div>
-          </div>
-          <div class="stats__category">
-            <div class="stats__sub-header">Channel</div>
-            <div class="stats__stat">
-              <span class="stats__stat-label">Messages Count</span>
-              <span class="stats__stat-value" v-if="statistics">{{ this.statistics.messagesCount }}</span>
-            </div>
-            <div class="stats__stat">
-              <span class="stats__stat-label">Subscriber Count</span>
-              <span class="stats__stat-value" v-if="statistics">{{ this.statistics.subscriberCount }}</span>
-            </div>
-            <div class="stats__stat">
-              <span class="stats__stat-label">Follower Count</span>
-              <span class="stats__stat-value" v-if="statistics">{{ this.statistics.followerCount }}</span>
-            </div>
-            <div class="stats__stat">
-              <span class="stats__stat-label">View Count</span>
-              <span class="stats__stat-value" v-if="statistics">{{ this.statistics.viewCount }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="stats__buttons">
-          <router-link to="login">
-            <button class="btn btn--blue">
-              Login
-            </button>
-          </router-link>
-        </div>
-      </div>
+      <form @submit.prevent="setUserLoyalty()" class="loyalty-migration" v-if="user.isSuperuser">
+        <label for="user-dump">User Dump</label>
+        <textarea id="user-dump" v-model="userDump"/>
+        <input type="submit"/>
+      </form>
+      <button class="btn btn--blue" @click="logout()">
+        Log Out
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-    import {query_getLeaderboard, query_getStatistics} from "@/queries"
+    import {AuthModule} from "../store/modules/auth";
+    import Axios from "axios";
+    import {mutation_setUserLoyalty} from "../queries";
 
     export default {
-        name: 'home',
+        name: "Home",
         data() {
             return {
-                leaderboard: [],
-                metricLoyalty: true,
-                statistics: null
-            }
-        },
-        watch: {
-            metricLoyalty() {
-                this.getLeaderboard()
+                userDump: '',
             }
         },
         computed: {
-            metric() {
-                return this.metricLoyalty ? 'Sushi Rolls' : 'Minutes'
+            user() {
+                return AuthModule.user
+            },
+            twitchUser() {
+                return AuthModule.profile.twitchUser
             }
         },
         methods: {
-            getLeaderboard() {
-                const metric = this.metricLoyalty ? 'loyalty_points' : 'minutes_watched'
-
-                this.$axios({
-                    url: process.env.VUE_APP_API_URL + '/graphql',
-                    method: 'POST',
-                    data: {
-                        query: query_getLeaderboard,
-                        variables: {
-                            metric: metric
+            setUserLoyalty() {
+                let results = this.userDump.split(/[\s\n]+/)
+                let payload = {}
+                results.forEach((result, index) => {
+                    if ((index + 1) % 3 === 0) {
+                        payload[results[index - 2].replace(/[\n\r]/g, '').replace(' ', '')] = {
+                            points: parseInt(results[index - 1]),
+                            minutes: Math.round(parseFloat(result) * 60)
                         }
                     }
-                }).then((response) => {
-                    this.leaderboard = response.data.data.leaderboard
+                })
+                Axios({
+                    url: process.env.VUE_APP_API_URL + '/graphql',
+                    method: "post",
+                    data: {
+                        query: mutation_setUserLoyalty,
+                        variables: {
+                            payload: JSON.stringify(payload)
+                        },
+                    }
                 })
             },
-            getMeeps() {
-                this.$axios({
-                    url: process.env.VUE_APP_API_URL + '/graphql',
-                    method: 'POST',
-                    data: {
-                        query: query_getStatistics
-                    }
-                }).then((response) => {
-                    this.statistics = response.data.data.statistics
-                })
+            logout() {
+                AuthModule.logout()
             }
-        },
-        mounted() {
-            this.getLeaderboard()
-            this.getMeeps()
         }
     }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   #home {
-    background-color: $wild-sand;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    position: relative;
+    align-items: center;
+    justify-content: center;
     min-height: 100vh;
-    width: 100vw;
 
-    .content-wrapper {
-      display: grid;
-      grid-gap: 20px;
-      grid-template: auto / 2fr 1fr;
-      padding: 50px 20%;
+    .user-panel {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      background-color: $alabaster;
+      border-radius: 2px;
+      border: 1px solid $athens-gray;
+      width: 50%;
+      min-height: 30vh;
 
-      .leaderboard {
-        width: 100%;
+      .user-panel__header {
         display: flex;
-        flex-direction: column;
-        background-color: $alabaster;
-        border-radius: 2px;
-        border: 1px solid $athens-gray;
+        align-items: center;
 
-        .leaderboard__header {
-          position: relative;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 20px 20px 0;
-
-          .leaderboard__toggle {
-            position: absolute;
-            right: 30px;
-            top: 30px;
-          }
-        }
-
-        .leaderboard__list {
-          padding: 20px;
-
-          .leaderboard__item {
-            display: grid;
-            grid-template: auto / .5fr 1fr .5fr;
-          }
+        .user-panel__avatar {
+          margin-right: 20px;
+          height: 100px;
+          width: 100px;
+          border-radius: 5px;
+          overflow: hidden;
         }
       }
 
-      .stats {
-        text-align: left;
+      .loyalty-migration {
         display: flex;
         flex-direction: column;
-
-        .stats__panel {
-          padding: 20px;
-          display: flex;
-          flex-direction: column;
-          background-color: $alabaster;
-          border-radius: 2px;
-          border: 1px solid $athens-gray;
-
-          .stats__header {
-            text-align: center;
-          }
-
-          .stats__category {
-            margin-top: 10px;
-
-            .stats__sub-header {
-              font-weight: bold;
-              font-size: 0.8rem;
-              opacity: 0.9;
-              text-transform: uppercase;
-              margin-top: 10px;
-            }
-
-            .stats__stat {
-              display: grid;
-              grid-template: auto / 2fr 1fr;
-
-              .stats__stat-label {
-                font-weight: bold;
-              }
-
-              .stats__stat-value {
-                align-self: end;
-                text-align: right;
-              }
-            }
-          }
-        }
-
-        .stats__buttons {
-          margin-top: 10px;
-          display: grid;
-          grid-template: auto / 1fr 1fr;
-
-          button {
-            width: 100%;
-          }
-        }
+        margin: 20px auto;
+        width: 200px;
       }
     }
   }

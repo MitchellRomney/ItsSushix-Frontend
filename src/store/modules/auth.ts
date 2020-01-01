@@ -1,6 +1,6 @@
 import {Action, getModule, Module, Mutation, VuexModule} from "vuex-module-decorators"
 import {ProfileType, UserType} from "@/types"
-import {mutation_login, mutation_refreshToken} from "@/queries"
+import {mutation_refreshToken, mutation_twitchLogin} from "@/queries"
 import store from "@/store"
 import Axios from "axios"
 import Vue from "vue"
@@ -25,29 +25,30 @@ class Auth extends VuexModule {
 
   @Mutation
   private RESET_STATE(){
+    PlatformModule.resetState()
     this.user = null
     this.profile = null
-    PlatformModule.loaded = false
   }
 
   @Action
-  public login(payload: any) {
-    if (payload.username && payload.password) {
+  public twitchLogin(payload: any) {
+    if (payload.username && payload.email && payload.twitchId) {
       Axios({
         url: process.env.VUE_APP_API_URL + '/graphql',
         method: "post",
         data: {
-          query: mutation_login,
+          query: mutation_twitchLogin,
           variables: {
-            username: payload.username,
-            password: payload.password
+            twitchUsername: payload.username,
+            email: payload.email,
+            twitchId: payload.twitchId
           },
         }
       }).then((response) => {
-        if (response.data.data.login !== null) {
+        if (response.data.data.twitchLogin !== null) {
 
           // Get the user information from the response and set the userId in cookies.
-          let data = response.data.data.login;
+          let data = response.data.data.twitchLogin
 
           Vue.prototype.$cookie.set('userId', data.user.id);
 
@@ -55,7 +56,7 @@ class Auth extends VuexModule {
           Vue.prototype.$cookie.set('token', data.user.token);
 
           // Redirect to home.
-          router.push({name: 'home'});
+          router.push({ name: 'Home' });
         }
       })
     }
@@ -65,8 +66,9 @@ class Auth extends VuexModule {
   public logout() {
     Vue.prototype.$cookie.delete('token')
     Vue.prototype.$cookie.delete('userId')
+    Vue.prototype.$cookie.delete('twitch_access_token')
     this.RESET_STATE()
-    router.push('/')
+    router.push({ name: 'Landing' })
   }
 
   @Action({rawError: true})

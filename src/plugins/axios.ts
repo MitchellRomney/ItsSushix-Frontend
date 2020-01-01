@@ -8,6 +8,6 @@ const base = axios.create({
 
 export default {
   install(Vue: VueConstructor) {
-    Vue.prototype.$axios = base
+    Vue.prototype.$http = base
   }
 }

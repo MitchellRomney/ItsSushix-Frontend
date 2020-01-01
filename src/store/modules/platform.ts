@@ -1,9 +1,9 @@
 import Vue from "vue";
 import router from "@/router";
 import store from '@/store/index'
-import Axios from "axios";
 import {Module, VuexModule, Mutation, Action, getModule} from 'vuex-module-decorators'
 import {AuthModule} from "@/store/modules/auth"
+import {query_userPlatformLoad} from "@/queries";
 
 
 @Module({store: store, namespaced: true, name: 'platform', dynamic: true})
@@ -16,11 +16,16 @@ class Platform extends VuexModule {
   }
 
   @Action
-  public setPlatform() {
-    Axios({
+  resetState() {
+    this.SET_PLATFORM_LOADED(false)
+  }
+
+  @Action
+  public loadPlatform() {
+    Vue.prototype.$http({
       method: 'POST',
       data: {
-        query: null,
+        query: query_userPlatformLoad,
         variables: {
           userId: Vue.prototype.$cookie.get('userId')
         },
@@ -32,12 +37,13 @@ class Platform extends VuexModule {
       AuthModule.initializeUser({user: user, profile: profile})
 
       this.SET_PLATFORM_LOADED(true)
+
       if (router.currentRoute.query.nextUrl) {
         router.push(router.currentRoute.query.nextUrl as string)
       } else {
         router.push({ name: 'Home' })
       }
-    });
+    })
   }
 }
 
