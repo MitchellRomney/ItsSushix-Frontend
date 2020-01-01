@@ -4,20 +4,34 @@ import store from '@/store/index'
 import {Module, VuexModule, Mutation, Action, getModule} from 'vuex-module-decorators'
 import {AuthModule} from "@/store/modules/auth"
 import {query_userPlatformLoad} from "@/queries";
+import {getDarkMode} from "@/utils/platform";
 
 
 @Module({store: store, namespaced: true, name: 'platform', dynamic: true})
 class Platform extends VuexModule {
   public loaded: Boolean = false
+  public darkMode: Boolean = getDarkMode() || false
 
   @Mutation
   private SET_PLATFORM_LOADED(value: Boolean) {
     this.loaded = value
   }
 
+  @Mutation
+  private SET_DARKMODE(value: Boolean) {
+    this.darkMode = value
+  }
+
   @Action
   resetState() {
     this.SET_PLATFORM_LOADED(false)
+  }
+
+  @Action
+  public toggleDarkMode() {
+    const colorScheme = !this.darkMode ? 'dark' : 'light'
+    Vue.prototype.$cookie.set('colorScheme', colorScheme)
+    this.SET_DARKMODE(!this.darkMode)
   }
 
   @Action

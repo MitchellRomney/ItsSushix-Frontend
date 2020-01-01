@@ -26,3 +26,19 @@ $charade: #282932;
 $athens-gray: #DFE3E8;
 $gull-gray: #9AA0B9;
 $logan: #A6ADC9;
+
+/* Light Mode */
+$light-text: $pickled-bluewood;
+$light-background: $alabaster; /* Sidebar, Masthead */
+$light-background-secondary: $wild-sand; /* View Background */
+$light-border: $athens-gray;
+$light-input: $alabaster;
+$light-shadow: 0 5px 10px rgba($gull-gray, 0.05), 0 15px 40px rgba($logan, 0.2);
+
+/* Dark Mode */
+$dark-text: $alabaster;
+$dark-background: $shark; /* Sidebar, Masthead */
+$dark-background-secondary: $cinder; /* View Background */
+$dark-border: $charade;
+$dark-input: $charade;
+$dark-shadow: 0 5px 10px rgba($shark, 0.05), 0 15px 40px rgba($mirage, 0.2);

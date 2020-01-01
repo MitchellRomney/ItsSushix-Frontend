@@ -48,8 +48,11 @@
 
 <style lang="scss" scoped>
   #profile {
-    background-color: $wild-sand;
     width: 100vw;
+
+    @include theme() {
+      background-color: t($background-secondary);
+    }
 
     .content-wrapper {
       display: grid;

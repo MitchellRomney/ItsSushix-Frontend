@@ -231,8 +231,11 @@
 
 <style lang="scss">
   #home {
-    background-color: $wild-sand;
     width: 100vw;
+
+    @include theme() {
+      background-color: t($background-secondary);
+    }
 
     .content-wrapper {
       display: grid;
@@ -245,10 +248,13 @@
         width: 100%;
         display: flex;
         flex-direction: column;
-        background-color: $alabaster;
         border-radius: 2px;
-        border: 1px solid $athens-gray;
         overflow-y: scroll;
+
+        @include theme() {
+          background-color: t($background);
+          border: 1px solid t($border);
+        }
 
         .leaderboard__header {
           position: relative;
@@ -270,11 +276,14 @@
             font-size: 0.8rem;
             opacity: 0.9;
             text-transform: uppercase;
-            border-bottom: 1px solid $athens-gray;
             padding: 10px;
             display: grid;
             grid-template: auto / .5fr 1fr .5fr;
             margin-top: 10px;
+
+            @include theme() {
+              border: 1px solid t($border);
+            }
           }
 
           .leaderboard__item {
@@ -314,10 +323,13 @@
           padding: 20px;
           display: flex;
           flex-direction: column;
-          background-color: $alabaster;
           border-radius: 2px;
-          border: 1px solid $athens-gray;
           margin-bottom: 20px;
+
+          @include theme() {
+            background-color: t($background);
+            border: 1px solid t($border);
+          }
 
           .user-panel__stats {
             margin-top: 20px;
@@ -362,8 +374,11 @@
               height: 100px;
               width: 100px;
               border-radius: 5px;
-              border: 1px solid $athens-gray;
               overflow: hidden;
+
+              @include theme() {
+                border: 1px solid t($border);
+              }
             }
           }
 
@@ -379,9 +394,12 @@
           padding: 20px;
           display: flex;
           flex-direction: column;
-          background-color: $alabaster;
           border-radius: 2px;
-          border: 1px solid $athens-gray;
+
+          @include theme() {
+            background-color: t($background);
+            border: 1px solid t($border);
+          }
 
           .stats__header {
             text-align: center;
