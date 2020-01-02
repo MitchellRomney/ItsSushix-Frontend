@@ -136,7 +136,7 @@
             <div>
               Position
             </div>
-            <div>
+            <div class="leaderboard__header-user">
               User
             </div>
             <div>
@@ -310,13 +310,18 @@
             font-size: 0.8rem;
             opacity: 0.9;
             text-transform: uppercase;
-            padding: 10px;
             display: grid;
-            grid-template: auto / .5fr 1fr .5fr;
+            padding: 10px 0;
+            grid-template: auto / .5fr 50px 1fr .5fr;
             margin-top: 10px;
 
             @include theme() {
-              border: 1px solid t($border);
+              border-top: 1px solid t($border);
+              border-bottom: 1px solid t($border);
+            }
+
+            .leaderboard__header-user {
+              grid-column-end: span 2;
             }
           }
 
