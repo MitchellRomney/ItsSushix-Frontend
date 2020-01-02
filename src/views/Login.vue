@@ -99,6 +99,10 @@
     justify-content: center;
     min-height: 100vh;
 
+    @include theme() {
+      background-color: t($background-secondary);
+    }
+
     .login-panel {
       width: 40%;
 

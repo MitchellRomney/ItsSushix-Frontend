@@ -17,9 +17,7 @@
     export default {
         name: 'app',
         data() {
-            return {
-
-            }
+            return {}
         },
         computed: {
             darkMode() {
@@ -38,27 +36,29 @@
 </script>
 
 <style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-}
-
-.dark-mode-toggle {
-  position: absolute;
-  top: 40px;
-  right: 50px;
-  cursor: pointer;
-
-  @include theme() {
-    color: t($text);
+  #app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
   }
-}
 
-.view-wrapper {
-  @include theme() {
-    color: t($text);
+  .dark-mode-toggle {
+    position: absolute;
+    top: 40px;
+    right: 50px;
+    cursor: pointer;
+    z-index: 1000;
+
+    @include theme() {
+      color: t($text);
+    }
   }
-}
+
+  .view-wrapper {
+    @include theme() {
+      background-color: t($background-secondary);
+      color: t($text);
+    }
+  }
 </style>

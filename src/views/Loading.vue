@@ -20,7 +20,7 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   #loading {
     display: flex;
     flex-direction: column;
@@ -29,5 +29,9 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+
+    @include theme() {
+      background-color: t($background-secondary);
+    }
   }
 </style>

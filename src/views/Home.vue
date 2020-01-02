@@ -4,10 +4,21 @@
       <div class="leaderboard">
         <div class="leaderboard__header">
           <h1>Leaderboard</h1>
-          <div class="leaderboard__toggle">
-            <toggle-button v-model="metricLoyalty" :labels="{ checked: 'Loyalty', unchecked: 'Watch Time' }"
-                           :width="100"/>
-          </div>
+        </div>
+        <div class="leaderboard__select">
+          <label for="metric">
+            Category
+          </label>
+          <select id="metric" v-model="metric">
+            <option value="loyaltyPoints">Sushi Rolls</option>
+            <option value="minutesWatched">Minutes Watched</option>
+            <option value="subscriptionMonths">Subscribed Months</option>
+          </select>
+          <span class="leaderboard__select-info" v-if="metric === 'subscriptionMonths'"
+                v-tooltip="'Make sure you send a message in chat and then check back!'"
+          >
+            Not seeing your name here?
+          </span>
         </div>
         <div class="leaderboard__list">
           <div class="leaderboard__column-headers">
@@ -18,12 +29,15 @@
               User
             </div>
             <div>
-              {{ metric }}
+              {{ metricLabel }}
             </div>
           </div>
-          <transition-group name="list">
-            <router-link :to="{ name: 'Profile', params: { username: user.displayName }}" v-for="(user, index) in leaderboard"
-                         :key="user.id">
+          <transition-group name="list-item" tag="div" class="leaderboard__items">
+            <router-link :to="{ name: 'Profile', params: { username: user.displayName }}"
+                         class="leaderboard__item-wrapper"
+                         v-for="(user, index) in leaderboard"
+                         :key="user.id"
+                         tag="div">
               <div class="leaderboard__item">
                 <span>#{{ index + 1 }}</span>
                 <div class="leaderboard__item-user">
@@ -34,7 +48,7 @@
                 </div>
                 <div class="leaderboard__value">
               <span>
-                {{ metricLoyalty ? user.loyaltyPoints : user.minutesWatched }}
+                {{ user[metric] }}
               </span>
                 </div>
               </div>
@@ -163,18 +177,23 @@
         data() {
             return {
                 leaderboard: [],
-                metricLoyalty: true,
+                metric: 'loyaltyPoints',
                 statistics: null
             }
         },
         watch: {
-            metricLoyalty() {
+            metric() {
                 this.getLeaderboard()
             }
         },
         computed: {
-            metric() {
-                return this.metricLoyalty ? 'Sushi Rolls' : 'Minutes'
+            metricLabel() {
+                const labels = {
+                    'loyaltyPoints': 'Sushi Rolls',
+                    'minutesWatched': 'Minutes Watched',
+                    'subscriptionMonths': 'Months Subscribed'
+                }
+                return labels[this.metric]
             },
             user() {
                 return AuthModule.user
@@ -189,15 +208,13 @@
         },
         methods: {
             getLeaderboard() {
-                const metric = this.metricLoyalty ? 'loyalty_points' : 'minutes_watched'
-
                 this.$http({
                     url: process.env.VUE_APP_API_URL + '/graphql',
                     method: 'POST',
                     data: {
                         query: query_getLeaderboard,
                         variables: {
-                            metric: metric
+                            metric: this.metric
                         }
                     }
                 }).then((response) => {
@@ -262,11 +279,13 @@
           justify-content: center;
           align-items: center;
           padding: 20px 20px 0;
+        }
 
-          .leaderboard__toggle {
-            position: absolute;
-            right: 30px;
-            top: 30px;
+        .leaderboard__select {
+          .leaderboard__select-info {
+            margin-left: 10px;
+            font-weight: bold;
+            cursor: pointer;
           }
         }
 
@@ -286,28 +305,39 @@
             }
           }
 
-          .leaderboard__item {
+          .leaderboard__items {
             display: grid;
-            grid-template: auto / .5fr 1fr .5fr;
-            align-items: center;
-            padding: 10px 0;
-            cursor: pointer;
-            transition: font-weight 0.25s ease;
+            grid-template: repeat(30, 1fr) / auto;
 
-            &:hover {
-              font-weight: bold;
-            }
+            .leaderboard__item-wrapper {
+              display: inline-flex;
+              position: relative;
 
-            .leaderboard__item-user {
-              display: flex;
-              align-items: center;
+              .leaderboard__item {
+                display: grid;
+                grid-template: auto / .5fr 1fr .5fr;
+                align-items: center;
+                padding: 10px 0;
+                cursor: pointer;
+                transition: font-weight 0.25s ease;
+                width: 100%;
 
-              .leaderboard__item-avatar {
-                height: 30px;
-                width: 30px;
-                overflow: hidden;
-                border-radius: 5px;
-                margin: auto 20px auto 0;
+                &:hover {
+                  font-weight: bold;
+                }
+
+                .leaderboard__item-user {
+                  display: flex;
+                  align-items: center;
+
+                  .leaderboard__item-avatar {
+                    height: 30px;
+                    width: 30px;
+                    overflow: hidden;
+                    border-radius: 5px;
+                    margin: auto 20px auto 0;
+                  }
+                }
               }
             }
           }

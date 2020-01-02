@@ -8,6 +8,9 @@ export const query_getLeaderboard =
       loyaltyPoints
       broadcasterType
       viewCount
+      color
+      subscriptionMonths
+      subscriber
     }
   }`
 export const mutation_refreshToken =
@@ -60,6 +63,9 @@ export const query_userPlatformLoad =
         loyaltyPoints
         minutesWatched
         bot
+        color
+        subscriptionMonths
+        subscriber
         dateModified
         dateCreated
       }
@@ -101,6 +107,9 @@ export const query_getTwitchUser =
       loyaltyPoints
       minutesWatched
       bot
+      color
+      subscriptionMonths
+      subscriber
       dateModified
       dateCreated
     }
