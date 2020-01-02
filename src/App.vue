@@ -44,7 +44,7 @@
   }
 
   .dark-mode-toggle {
-    position: absolute;
+    position: fixed;
     top: 40px;
     right: 50px;
     cursor: pointer;

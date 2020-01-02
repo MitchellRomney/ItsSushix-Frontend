@@ -104,7 +104,11 @@
     }
 
     .login-panel {
-      width: 40%;
+      width: 80%;
+
+      @media #{$bp-md}{
+        width: 40%;
+      }
 
       .login-panel__wrapper {
         margin: auto;

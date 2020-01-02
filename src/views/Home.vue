@@ -1,69 +1,17 @@
 <template>
   <div id="home">
     <div class="content-wrapper">
-      <div class="leaderboard">
-        <div class="leaderboard__header">
-          <h1>Leaderboard</h1>
-        </div>
-        <div class="leaderboard__select">
-          <label for="metric">
-            Category
-          </label>
-          <select id="metric" v-model="metric">
-            <option value="loyaltyPoints">Sushi Rolls</option>
-            <option value="minutesWatched">Minutes Watched</option>
-            <option value="subscriptionMonths">Subscribed Months</option>
-          </select>
-          <span class="leaderboard__select-info" v-if="metric === 'subscriptionMonths'"
-                v-tooltip="'Make sure you send a message in chat and then check back!'"
-          >
-            Not seeing your name here?
-          </span>
-        </div>
-        <div class="leaderboard__list">
-          <div class="leaderboard__column-headers">
-            <div>
-              Position
-            </div>
-            <div>
-              User
-            </div>
-            <div>
-              {{ metricLabel }}
-            </div>
-          </div>
-          <transition-group name="list-item" tag="div" class="leaderboard__items">
-            <router-link :to="{ name: 'Profile', params: { username: user.displayName }}"
-                         class="leaderboard__item-wrapper"
-                         v-for="(user, index) in leaderboard"
-                         :key="user.id"
-                         tag="div">
-              <div class="leaderboard__item">
-                <span>#{{ index + 1 }}</span>
-                <div class="leaderboard__item-user">
-                  <div class="leaderboard__item-avatar" v-if="user">
-                    <img :alt="user.displayName" class="responsive" :src="user.profileImageUrl"/>
-                  </div>
-                  {{ user.displayName }}
-                </div>
-                <div class="leaderboard__value">
-              <span>
-                {{ user[metric] }}
-              </span>
-                </div>
-              </div>
-            </router-link>
-          </transition-group>
-        </div>
-      </div>
-      <div class="stats">
+      <div class="sidebar">
         <div class="user-panel">
           <div class="user-panel__header">
             <div class="user-panel__avatar" v-if="twitchUser">
               <img :alt="twitchUser.displayName" class="responsive" :src="twitchUser.profileImageUrl"/>
             </div>
             <h3 v-if="twitchUser">
-              Welcome, {{ twitchUser.displayName }}
+              Welcome,
+              <span :style="{color: twitchUser.color}">
+              {{ twitchUser.displayName }}
+              </span>
             </h3>
             <h3 v-else>
               Log in to see more!
@@ -164,6 +112,61 @@
           </div>
         </div>
       </div>
+      <div class="leaderboard">
+        <div class="leaderboard__header">
+          <h1>Leaderboard</h1>
+        </div>
+        <div class="leaderboard__select">
+          <label for="metric">
+            Category
+          </label>
+          <select id="metric" v-model="metric">
+            <option value="loyaltyPoints">Sushi Rolls</option>
+            <option value="minutesWatched">Minutes Watched</option>
+            <option value="subscriptionMonths">Subscribed Months</option>
+          </select>
+          <span class="leaderboard__select-info" v-if="metric === 'subscriptionMonths'"
+                v-tooltip="'Make sure you send a message in chat and then check back!'"
+          >
+            Not seeing your name here?
+          </span>
+        </div>
+        <div class="leaderboard__list">
+          <div class="leaderboard__column-headers">
+            <div>
+              Position
+            </div>
+            <div>
+              User
+            </div>
+            <div>
+              {{ metricLabel }}
+            </div>
+          </div>
+          <transition-group name="list-item" tag="div" class="leaderboard__items">
+            <router-link :to="{ name: 'Profile', params: { username: user.displayName }}"
+                         class="leaderboard__item-wrapper"
+                         v-for="(user, index) in leaderboard"
+                         :key="user.id"
+                         tag="div">
+              <div class="leaderboard__item">
+                <span>#{{ index + 1 }}</span>
+                <div class="leaderboard__item-avatar" v-if="user">
+                  <img :alt="user.displayName" class="responsive" :src="user.profileImageUrl"/>
+                </div>
+                <div class="leaderboard__item-user" :style="{ color: user.color}">
+                  {{ user.displayName }}
+                </div>
+                <div class="leaderboard__value">
+              <span>
+                {{ user[metric] }}
+              </span>
+                </div>
+              </div>
+            </router-link>
+          </transition-group>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -255,11 +258,17 @@
     }
 
     .content-wrapper {
-      display: grid;
-      grid-gap: 20px;
-      grid-template: auto / 2fr 1fr;
+      display: flex;
+      flex-direction: column;
       padding: 50px 10%;
       min-height: calc(100vh - 100px);
+
+      @media #{$bp-md}{
+        display: grid;
+        grid-gap: 20px;
+        grid-template: auto / 2fr 1fr;
+        grid-template-areas: 'leaderboard sidebar';
+      }
 
       .leaderboard {
         width: 100%;
@@ -267,6 +276,12 @@
         flex-direction: column;
         border-radius: 2px;
         overflow-y: scroll;
+        margin-top: 20px;
+
+        @media #{$bp-md}{
+          grid-area: leaderboard;
+          margin-top: 0;
+        }
 
         @include theme() {
           background-color: t($background);
@@ -315,7 +330,7 @@
 
               .leaderboard__item {
                 display: grid;
-                grid-template: auto / .5fr 1fr .5fr;
+                grid-template: auto / .5fr 50px 1fr .5fr;
                 align-items: center;
                 padding: 10px 0;
                 cursor: pointer;
@@ -326,17 +341,18 @@
                   font-weight: bold;
                 }
 
+                .leaderboard__item-avatar {
+                  height: 30px;
+                  width: 30px;
+                  overflow: hidden;
+                  border-radius: 5px;
+                  margin: auto 20px auto 0;
+                }
+
                 .leaderboard__item-user {
+                  overflow-x: hidden;
                   display: flex;
                   align-items: center;
-
-                  .leaderboard__item-avatar {
-                    height: 30px;
-                    width: 30px;
-                    overflow: hidden;
-                    border-radius: 5px;
-                    margin: auto 20px auto 0;
-                  }
                 }
               }
             }
@@ -344,7 +360,8 @@
         }
       }
 
-      .stats {
+      .sidebar {
+        grid-area: sidebar;
         text-align: left;
         display: flex;
         flex-direction: column;
