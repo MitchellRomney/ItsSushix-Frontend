@@ -20,6 +20,13 @@ const routes = [
     component: () => import("@/views/Login.vue"),
   },
   {
+    path: '/notion',
+    beforeEnter() {
+      // @ts-ignore
+      window.location = "https://www.notion.so/1309c62f30074c26902db4030e70933e?v=78293f405a8f4273937b79af668740a0"
+    }
+  },
+  {
     path: '/loading',
     name: 'Loading',
     component: () => import("@/views/Loading.vue"),
