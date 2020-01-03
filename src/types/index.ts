@@ -4,6 +4,17 @@ export interface UserType {
   isSuperuser: Boolean
 }
 
+export interface TwitchUserType {
+  displayName: String
+  minutesWatched: number,
+  loyaltyPoints: number,
+  messagesCount: number,
+  viewCount: number
+  followerCount: number,
+  subscriberCount: number
+}
+
 export interface ProfileType {
   user: UserType | null
+  twitchUser: TwitchUserType | null
 }

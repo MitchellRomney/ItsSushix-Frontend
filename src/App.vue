@@ -7,15 +7,20 @@
       <transition name="fade" mode="out-in">
         <router-view/>
       </transition>
+      <TheFooter/>
     </div>
   </div>
 </template>
 
 <script>
-    import {PlatformModule} from "@/store/modules/platform";
+    import {PlatformModule} from "@/store/modules/platform"
+    import TheFooter from "@/components/TheFooter"
 
     export default {
         name: 'app',
+        components: {
+            TheFooter
+        },
         data() {
             return {}
         },
@@ -40,7 +45,8 @@
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
+    width: 100vw;
+    overflow: hidden;
   }
 
   .dark-mode-toggle {

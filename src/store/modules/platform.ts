@@ -11,6 +11,7 @@ import {getDarkMode} from "@/utils/platform";
 class Platform extends VuexModule {
   public loaded: Boolean = false
   public darkMode: Boolean = getDarkMode() || false
+  public packageVersion: String = process.env.PACKAGE_VERSION || '0'
 
   @Mutation
   private SET_PLATFORM_LOADED(value: Boolean) {
