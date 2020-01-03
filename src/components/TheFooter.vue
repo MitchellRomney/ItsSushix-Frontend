@@ -38,6 +38,7 @@
 
 <style lang="scss" scoped>
   #footer {
+    margin-top: auto;
     position: relative;
     height: 30px;
     width: calc(100vw - 100px);

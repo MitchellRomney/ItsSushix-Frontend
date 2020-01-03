@@ -43,7 +43,7 @@
 
 <style lang="scss">
   #home {
-    width: 100vw;
+    max-width: 100vw;
 
     @include theme() {
       background-color: t($background-secondary);
@@ -58,57 +58,17 @@
       @media #{$bp-md}{
         display: grid;
         grid-gap: 30px;
-        grid-template: auto / 2fr 1fr;
-        grid-template-areas: 'leaderboard sidebar';
+        grid-template: auto auto / 2fr 1fr;
+        grid-template-areas: 'leaderboard sidebar' 'leaderboard .';
       }
 
       .sidebar {
+        position: sticky;
         grid-area: sidebar;
         text-align: left;
         display: flex;
         flex-direction: column;
-
-        .stats__panel {
-          padding: 20px;
-          display: flex;
-          flex-direction: column;
-          border-radius: 2px;
-
-          @include theme() {
-            background-color: t($background);
-            border: 1px solid t($border);
-          }
-
-          .stats__header {
-            text-align: center;
-          }
-
-          .stats__category {
-            margin-top: 10px;
-
-            .stats__sub-header {
-              font-weight: bold;
-              font-size: 0.8rem;
-              opacity: 0.9;
-              text-transform: uppercase;
-              margin-top: 10px;
-            }
-
-            .stats__stat {
-              display: grid;
-              grid-template: auto / 2fr 1fr;
-
-              .stats__stat-label {
-                font-weight: bold;
-              }
-
-              .stats__stat-value {
-                align-self: end;
-                text-align: right;
-              }
-            }
-          }
-        }
+        top: 0;
       }
     }
   }

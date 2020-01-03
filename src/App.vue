@@ -46,7 +46,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     width: 100vw;
-    overflow: hidden;
+    min-height: 100vh;
   }
 
   .dark-mode-toggle {
@@ -62,6 +62,10 @@
   }
 
   .view-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
     @include theme() {
       background-color: t($background-secondary);
       color: t($text);
