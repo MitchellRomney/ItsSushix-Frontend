@@ -8,7 +8,7 @@
       </div>
       <div class="footer__right">
         <div class="footer__link">
-          <a href="https://discord.gg/D59uzQT">
+          <a href="https://discord.gg/D59uzQT" target="_blank">
             <font-awesome-icon :icon="['fab', 'discord']"/>
             Discord
           </a>
@@ -16,8 +16,8 @@
         <div class="footer__divider"/>
         <div class="footer__link">
           <font-awesome-icon icon="list"/>
-          <a href="https://www.notion.so/1309c62f30074c26902db4030e70933e?v=78293f405a8f4273937b79af668740a0">
-            Project To-Do Board
+          <a href="https://www.notion.so/1309c62f30074c26902db4030e70933e?v=78293f405a8f4273937b79af668740a0" target="_blank">
+            Notion Board
           </a>
         </div>
       </div>

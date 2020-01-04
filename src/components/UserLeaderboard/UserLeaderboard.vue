@@ -123,7 +123,6 @@
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-    margin-top: 20px;
 
     @media #{$bp-md}{
       grid-area: leaderboard;
@@ -134,12 +133,8 @@
       position: relative;
       display: flex;
       align-items: center;
-      text-align: left;
-      font-weight: bold;
-      font-size: 0.8rem;
-      opacity: 0.9;
-      text-transform: uppercase;
       height: 70px;
+      margin-bottom: 50px;
 
       .leaderboard__select-wrapper {
         display: flex;

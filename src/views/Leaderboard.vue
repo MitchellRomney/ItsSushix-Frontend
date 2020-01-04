@@ -22,6 +22,6 @@
 
 <style lang="scss" scoped>
   #leaderboard {
-    padding: 20px 5%;
+    padding: 50px 5%;
   }
 </style>
