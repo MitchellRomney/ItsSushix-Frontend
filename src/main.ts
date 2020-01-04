@@ -7,13 +7,13 @@ import { ToggleButton } from 'vue-js-toggle-button'
 // @ts-ignore
 import VueCookie from 'vue-cookie'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faMoon, faSync, faList } from '@fortawesome/free-solid-svg-icons'
+import { faMoon, faSync, faList, faHome, faTrophy, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import { faTwitch, faDiscord } from "@fortawesome/free-brands-svg-icons"
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 // @ts-ignore
 import VTooltip from 'v-tooltip'
 
-library.add(faMoon, faTwitch, faSync, faDiscord, faList)
+library.add(faMoon, faTwitch, faSync, faDiscord, faList, faHome, faTrophy, faSignOutAlt)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

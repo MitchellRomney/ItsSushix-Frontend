@@ -15,6 +15,11 @@ const routes = [
     component: Home
   },
   {
+    path: '/leaderboard',
+    name: 'Leaderboard',
+    component: () => import("@/views/Leaderboard.vue"),
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import("@/views/Login.vue"),

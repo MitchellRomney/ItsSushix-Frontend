@@ -48,18 +48,6 @@
 
 <style lang="scss" scoped>
   #profile {
-    width: 100vw;
 
-    @include theme() {
-      background-color: t($background-secondary);
-    }
-
-    .content-wrapper {
-      display: grid;
-      grid-gap: 20px;
-      grid-template: auto / 2fr 1fr;
-      padding: 50px 10%;
-      min-height: calc(100vh - 100px);
-    }
   }
 </style>

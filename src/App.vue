@@ -3,6 +3,7 @@
     <div class="dark-mode-toggle" @click="toggleDarkMode">
       <font-awesome-icon icon="moon"/>
     </div>
+    <the-sidebar/>
     <div class="view-wrapper">
       <transition name="fade" mode="out-in">
         <router-view/>
@@ -15,10 +16,12 @@
 <script>
     import {PlatformModule} from "@/store/modules/platform"
     import TheFooter from "@/components/TheFooter"
+    import TheSidebar from "@/components/TheSidebar/TheSidebar"
 
     export default {
         name: 'app',
         components: {
+            TheSidebar,
             TheFooter
         },
         data() {
@@ -51,8 +54,8 @@
 
   .dark-mode-toggle {
     position: fixed;
-    top: 40px;
-    right: 50px;
+    top: 20px;
+    right: 30px;
     cursor: pointer;
     z-index: 1000;
 
@@ -62,6 +65,7 @@
   }
 
   .view-wrapper {
+    margin-left: 18rem;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
