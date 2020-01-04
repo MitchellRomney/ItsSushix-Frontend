@@ -12,12 +12,18 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    meta: {
+      requiresLogin: true
+    }
   },
   {
     path: '/leaderboard',
     name: 'Leaderboard',
     component: () => import("@/views/Leaderboard.vue"),
+    meta: {
+      requiresLogin: true
+    }
   },
   {
     path: '/login',
@@ -35,11 +41,17 @@ const routes = [
     path: '/loading',
     name: 'Loading',
     component: () => import("@/views/Loading.vue"),
+    meta: {
+      requiresLogin: true
+    }
   },
   {
     path: '/profile/:username',
     name: 'Profile',
     component: () => import("@/views/Profile.vue"),
+    meta: {
+      requiresLogin: true
+    }
   },
 ]
 

@@ -3,8 +3,8 @@
     <div class="dark-mode-toggle" @click="toggleDarkMode">
       <font-awesome-icon icon="moon"/>
     </div>
-    <the-sidebar/>
-    <div class="view-wrapper">
+    <the-sidebar v-if="platformLoaded" />
+    <div class="view-wrapper" :class="{ dashboard: platformLoaded}">
       <transition name="fade" mode="out-in">
         <router-view/>
       </transition>
@@ -28,6 +28,9 @@
             return {}
         },
         computed: {
+            platformLoaded() {
+              return PlatformModule.loaded
+            },
             darkMode() {
                 return PlatformModule.darkMode
             },
@@ -50,6 +53,7 @@
     -moz-osx-font-smoothing: grayscale;
     width: 100vw;
     min-height: 100vh;
+    overflow: hidden;
   }
 
   .dark-mode-toggle {
@@ -65,10 +69,14 @@
   }
 
   .view-wrapper {
-    margin-left: 18rem;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    overflow-y: scroll;
+
+    &.dashboard {
+      margin-left: 18rem;
+    }
 
     @include theme() {
       background-color: t($background-secondary);

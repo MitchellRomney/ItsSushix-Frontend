@@ -19,6 +19,7 @@
             <option value="loyaltyPoints">Sushi Rolls</option>
             <option value="minutesWatched">Minutes Watched</option>
             <option value="subscriptionMonths">Subscribed Months</option>
+            <option value="messagesCount">Total Chat Messages</option>
           </select>
         </div>
       </div>
@@ -38,7 +39,7 @@
         </div>
         <transition name="fade" mode="out-in">
           <transition-group name="list-item" tag="div" class="leaderboard__items" v-if="!leaderboardLoading">
-            <leaderboard-item v-for="(user, index) in leaderboard" :key="user.id" :user="user" :index="index"
+            <leaderboard-item v-for="(user, index) in sortedLeaderboard" :key="user.id" :user="user" :index="index"
                               :metric="metric"/>
           </transition-group>
         </transition>
@@ -70,12 +71,21 @@
                 const labels = {
                     'loyaltyPoints': 'Sushi Rolls',
                     'minutesWatched': 'Minutes Watched',
-                    'subscriptionMonths': 'Months Subscribed'
+                    'subscriptionMonths': 'Months Subscribed',
+                    'messagesCount': 'Total Chat Messages'
                 }
                 return labels[this.metric]
             },
             platformVersion() {
                 return PlatformModule.packageVersion
+            },
+            sortedLeaderboard() {
+                let leaderboard = this.leaderboard
+                return leaderboard.sort( (a, b) => {
+                      let x = a[this.metric]
+                    let y = b[this.metric]
+                    return ((x > y) ? -1 : ((x < y) ? 1 : 0));
+                });
             }
         },
         watch: {

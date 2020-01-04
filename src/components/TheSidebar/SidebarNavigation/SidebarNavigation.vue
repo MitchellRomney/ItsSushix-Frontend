@@ -6,8 +6,8 @@
     <router-link class="sidebar-navigation__item-wrapper" :to="{ name: 'Leaderboard' }">
       <NavigationItem name="Leaderboard" icon="trophy"/>
     </router-link>
-    <div class="sidebar-navigation__logout-wrapper">
-      <NavigationItem name="Logout" icon="sign-out-alt" @click="logout"/>
+    <div class="sidebar-navigation__logout-wrapper" v-if="user" @click="logout">
+      <NavigationItem name="Logout" icon="sign-out-alt"/>
     </div>
   </div>
 </template>
@@ -20,6 +20,11 @@
         name: "sidebar-navigation",
         components: {
             NavigationItem
+        },
+        computed: {
+            user() {
+                return AuthModule.user
+            }
         },
         methods: {
             logout() {

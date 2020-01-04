@@ -11,6 +11,7 @@ export const query_getLeaderboard =
       color
       subscriptionMonths
       subscriber
+      messagesCount
     }
   }`
 export const mutation_refreshToken =
