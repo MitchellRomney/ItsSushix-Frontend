@@ -12,6 +12,7 @@ export interface TwitchUserType {
   viewCount: number
   followerCount: number,
   subscriberCount: number
+  profileImageUrl: URL
 }
 
 export interface ProfileType {

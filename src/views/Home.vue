@@ -3,16 +3,22 @@
     <div class="home__header">
       <h2>Home</h2>
     </div>
-    <PersonalStats/>
+    <UserStatsRow :twitch-user="twitchUser"/>
   </div>
 </template>
 
 <script>
-  import PersonalStats from "@/components/PersonalStats/PersonalStats";
+  import UserStatsRow from "@/components/UserStatsRow/UserStatsRow";
+  import {AuthModule} from "@/store/modules/auth";
     export default {
         name: 'home',
         components: {
-            PersonalStats
+            UserStatsRow
+        },
+        computed: {
+            twitchUser() {
+                return AuthModule.profile.twitchUser
+            }
         }
     }
 </script>
