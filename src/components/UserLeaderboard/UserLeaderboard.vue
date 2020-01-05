@@ -122,7 +122,6 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
 
     @media #{$bp-md}{
       grid-area: leaderboard;
@@ -195,7 +194,6 @@
           text-align: center;
 
           @include theme() {
-            border-top: 1px solid t($border);
             border-bottom: 1px solid t($border);
           }
 

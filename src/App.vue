@@ -51,9 +51,8 @@
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    width: 100vw;
-    min-height: 100vh;
-    overflow: hidden;
+    height: 100vh;
+    display: flex;
   }
 
   .dark-mode-toggle {
@@ -71,8 +70,8 @@
   .view-wrapper {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    overflow-y: scroll;
+    overflow-y: auto;
+    width: 100%;
 
     &.dashboard {
       margin-left: 18rem;
